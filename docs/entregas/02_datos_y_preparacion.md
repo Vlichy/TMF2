@@ -2,7 +2,9 @@
 
 ## 1. Qué datos necesita el producto
 
-El producto ayudaría al equipo de reservas a priorizar el seguimiento de reservas con riesgo de cancelación. Cada fila representa una reserva registrada, incluida si terminó cancelada. Para preparar el prototipo necesitamos el hotel, la fecha prevista de llegada, la antelación, la duración de la estancia y el canal de venta. Para aprender de reservas históricas necesitamos además saber si se cancelaron. La habitación reservada, el régimen y la composición del grupo aportan contexto. Para un piloto sería deseable contar con un identificador interno, la fecha real de creación y una copia de los campos tal como estaban al reservar. Conviene disponer de al menos un ciclo anual completo para observar la estacionalidad.
+El equipo de reservas revisaría cada mañana las llegadas previstas para dos días después. En producción, el corte sería a las 09:00 en la zona horaria del hotel, dos días naturales antes de la fecha de llegada. Se incluirían solamente reservas activas según el sistema del hotel a esa hora. Cada fila operativa representaría una reserva elegible en ese corte. Harían falta un ID estable, el historial de estados con marcas de tiempo y los valores de los campos tal como constaban al corte. Se conservaría al menos un ciclo anual para cubrir la estacionalidad.
+
+Con un cupo diario de K contactos por hotel, se compararía el ranking del modelo con una regla sencilla que priorice las reservas de mayor antelación, con desempate estable por ID. Ambos rankings usarían el mismo conjunto elegible y seleccionarían hasta K reservas. Se contaría cuántas cancelaciones avisadas posteriores al corte identifica cada método dentro de ese cupo. La comparación serviría para evaluar la priorización. Para medir si contactar evita cancelaciones haría falta un piloto.
 
 ## 2. Fuentes reales y viabilidad
 
@@ -36,9 +38,14 @@ python -m src.preparation
 
 El [script](../../src/preparation.py) verifica la entrada y regenera el CSV preparado y sus informes locales. El [notebook de preparación](../../notebooks/preparacion.ipynb) explica el flujo paso a paso. Esta entrega aporta referencias a los datos existentes sin añadir otra copia de los CSV.
 
+La [muestra del Gold histórico](muestra_gold_historico.csv) contiene diez filas, cinco por clase de la etiqueta original, para inspeccionar el esquema. El muestreo usa semilla 42. La muestra no estima prevalencias.
+
+En el archivo histórico, `is_canceled=1` reúne 43.017 casos con estado final `Canceled` y 1.207 `No-Show`. Las 75.166 filas `Check-Out` tienen etiqueta 0. Para el producto, sería positivo un aviso de cancelación registrado después del corte y antes de la llegada prevista en una reserva activa al corte. Una reserva ya cancelada al corte queda fuera del cupo. Una no presentación se registra por separado y cuenta como 0 para el objetivo de aviso. La fecha del último estado del CSV no acredita la hora del aviso ni la secuencia de estados.
+
+Al separar entrenamiento, validación y prueba por fechas de corte, se mantendrán juntas todas las filas de cada `meta_duplicate_group`. Si un grupo abarca más de un periodo, se apartará completo de la evaluación y se registrará cuántas filas se excluyen. Se comprobará que los grupos de las tres particiones sean disjuntos y que las etiquetas de entrenamiento ya hubieran cerrado antes del siguiente periodo.
+
 ## 5. Riesgos y limitaciones
 
-- Faltan la fecha real de creación, un ID estable y la versión de los campos en el momento de reservar; no se puede demostrar que todos los predictores estuvieran disponibles entonces.
-- Dos hoteles portugueses y un histórico cerrado en 2017 limitan la representatividad para otros hoteles y para la operación actual.
-- Si la copia principal dejara de estar disponible, recurriríamos a los suplementos originales y volveríamos a verificar cobertura, esquema y recuentos antes de usar el Gold.
-
+- Faltan capturas a la hora de corte, historial de estados e ID estable. El Gold publicado describe el histórico y solo permite verificar el flujo técnico.
+- Dos hoteles portugueses y llegadas hasta agosto de 2017 limitan la representatividad para un piloto actual.
+- Si falla el enlace al CSV, se usarán los suplementos originales y se volverán a comprobar cobertura, esquema y recuentos.

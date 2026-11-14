@@ -1,0 +1,11 @@
+lead_time,total_nights,adults,children,babies,children_missing,hotel,arrival_date_month,meal,country,market_segment,distribution_channel,reserved_room_type,customer_type,is_canceled,meta_row_id,meta_duplicate_group,meta_arrival_date,meta_booking_date_proxy,meta_label_available_after,meta_adr_negative,meta_adr_zero,meta_zero_nights,meta_zero_guests,meta_guests_unknown
+8.0,2.0,2.0,2.0,0.0,0.0,City Hotel,February,BB,PRT,Direct,Direct,E,Transient,1,47393,4a9728512b77d154,2016-02-19,2016-02-11,2016-02-22,0,0,0,0,0
+5.0,4.0,1.0,0.0,0.0,0.0,City Hotel,April,BB,PRT,Aviation,Corporate,A,Transient-Party,1,49013,5b4ca1b3659a5d46,2016-04-04,2016-03-30,2016-04-09,0,0,0,0,0
+295.0,2.0,2.0,0.0,0.0,0.0,City Hotel,April,BB,PRT,Groups,TA/TO,A,Transient,1,50278,685579d00929d7ef,2016-04-28,2015-07-08,2016-05-01,0,0,0,0,0
+123.0,2.0,2.0,1.0,0.0,0.0,City Hotel,May,BB,GBR,Online TA,TA/TO,A,Transient,1,68060,26c87f0e70c9dbbd,2017-05-12,2017-01-09,2017-05-15,0,0,0,0,0
+336.0,2.0,2.0,0.0,0.0,0.0,City Hotel,September,HB,PRT,Offline TA/TO,TA/TO,A,Transient-Party,1,75997,de07371576182bc6,2015-09-18,2014-10-17,2015-09-21,0,0,0,0,0
+2.0,1.0,2.0,0.0,0.0,0.0,City Hotel,July,BB,AUS,Direct,Direct,A,Transient,0,92195,233852cd7d676c00,2016-07-01,2016-06-29,2016-07-03,0,0,0,0,0
+121.0,2.0,2.0,0.0,0.0,0.0,City Hotel,July,BB,DNK,Online TA,TA/TO,A,Transient,0,93656,d497bfbb592cba39,2016-07-23,2016-03-24,2016-07-26,0,0,0,0,0
+20.0,1.0,2.0,0.0,0.0,0.0,City Hotel,May,BB,PRT,Online TA,TA/TO,A,Transient,0,112375,b55979e470b57d9f,2017-05-23,2017-05-03,2017-05-25,0,0,0,0,0
+12.0,1.0,1.0,0.0,0.0,0.0,City Hotel,May,SC,PRT,Online TA,TA/TO,A,Transient,0,112389,f485bd70d277a4b6,2017-05-23,2017-05-11,2017-05-25,0,0,0,0,0
+191.0,7.0,2.0,0.0,0.0,0.0,City Hotel,August,HB,GBR,Offline TA/TO,TA/TO,A,Transient,0,118326,eb313ab0af97dfda,2017-08-11,2017-02-01,2017-08-19,0,0,0,0,0
