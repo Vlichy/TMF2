@@ -22,7 +22,7 @@ El artículo se publica bajo [CC BY 4.0](https://creativecommons.org/licenses/by
 | --- | --- |
 | Bronze / Raw | CSV local de origen, conservado sin cambios. Se comprueba su SHA-256 antes de preparar los datos. |
 | Silver | [Limpieza en memoria](../../src/cleaning.py): se normalizan tipos, se mantienen nulos de país y número de niños y se señalan anomalías. Se conservan las filas repetidas porque sin un ID de reserva no se puede distinguir una duplicación técnica de dos reservas iguales. No se necesitan cruces entre tablas. |
-| Gold | CSV preparado en data/processed/hotel_bookings_prepared.csv: 119.390 filas, 14 variables candidatas, la etiqueta `is_canceled` (1 = cancelada) y metadatos separados para auditoría. |
+| Gold histórico · reservas_historicas | CSV preparado en data/processed/hotel_bookings_prepared.csv: 119.390 filas, 14 variables candidatas, la etiqueta `is_canceled` (1 = cancelación o no presentación) y metadatos separados para auditoría. |
 
 Las seis variables numéricas son `lead_time`, `total_nights`, `adults`, `children`, `babies` y `children_missing`. El total de noches suma las de semana y fin de semana; el indicador permite distinguir un número de niños desconocido de un cero. Las ocho categóricas son `hotel`, `arrival_date_month`, `meal`, `country`, `market_segment`, `distribution_channel`, `reserved_room_type` y `customer_type`.
 
@@ -43,6 +43,23 @@ La [muestra del Gold histórico](muestra_gold_historico.csv) contiene diez filas
 En el archivo histórico, `is_canceled=1` reúne 43.017 casos con estado final `Canceled` y 1.207 `No-Show`. Las 75.166 filas `Check-Out` tienen etiqueta 0. Para el producto, sería positivo un aviso de cancelación registrado después del corte y antes de la llegada prevista en una reserva activa al corte. Una reserva ya cancelada al corte queda fuera del cupo. Una no presentación se registra por separado y cuenta como 0 para el objetivo de aviso. La fecha del último estado del CSV no acredita la hora del aviso ni la secuencia de estados.
 
 Al separar entrenamiento, validación y prueba por fechas de corte, se mantendrán juntas todas las filas de cada `meta_duplicate_group`. Si un grupo abarca más de un periodo, se apartará completo de la evaluación y se registrará cuántas filas se excluyen. Se comprobará que los grupos de las tres particiones sean disjuntos y que las etiquetas de entrenamiento ya hubieran cerrado antes del siguiente periodo.
+
+
+### Tablas y alcance de las comprobaciones
+
+**`reservas_historicas`** es el nombre de la tabla disponible, generada en `data/processed/hotel_bookings_prepared.csv`. Cada fila corresponde a un registro del CSV histórico. Su muestra es `muestra_gold_historico.csv`. Permite comprobar la huella del origen, la conservación de filas, tipos y nulos, las transformaciones, las marcas de calidad, los grupos de duplicados y la separación de variables candidatas, etiqueta y metadatos. También permite describir las asociaciones con el resultado final histórico. La disponibilidad de sus campos a las nueve y la elegibilidad para recibir una llamada quedan pendientes de acreditar.
+
+**`reservas_activas_corte_09h`** es el nombre de la tabla operativa pendiente de construir con el historial del hotel. Cada fila representará una reserva activa a las 09:00 locales, dos días naturales antes de su llegada prevista según la información disponible al corte. Su clave será el par `reserva_id`, `corte_at`.
+
+| Campos de la tabla operativa | Significado y procedencia |
+| --- | --- |
+| `reserva_id`, `hotel_id`, `corte_at` | Identificador seudonimizado, hotel y corte con zona horaria. |
+| `llegada_prevista_at_corte`, `estado_at_corte` | Llegada prevista y estado reconstruidos con los eventos anteriores o iguales al corte. La población incluye las reservas activas con llegada dos días después. |
+| Variables disponibles al corte y sus marcas de actualización | Última versión conocida a esa hora de cada predictor, trazable al historial del sistema. |
+| `aviso_cancelacion_at`, `no_show`, `seguimiento_hasta` | Resultado posterior obtenido del historial y fecha hasta la que se verificó su cierre. Se incorporan al evaluar. |
+| `y_aviso_post_corte` | Vale 1 si hubo aviso después del corte y antes de la llegada prevista al corte. Vale 0 si el seguimiento completo acredita que no hubo ese aviso. Queda desconocida mientras falte seguimiento. |
+
+Con ese historial quedarán por comprobar la reconstrucción de la población activa, la disponibilidad temporal de cada predictor, la separación entre avisos y no presentaciones y la madurez de las etiquetas. Una vez verificadas, se podrá comparar cuántas cancelaciones avisadas identifica el modelo frente a la regla de mayor antelación con el mismo cupo diario por hotel. La medición del efecto de las llamadas requerirá un piloto con resultados de los contactos.
 
 ## 5. Riesgos y limitaciones
 
