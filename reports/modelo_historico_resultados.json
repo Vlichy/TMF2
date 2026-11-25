@@ -1,0 +1,117 @@
+{
+  "tabla": "reservas_historicas",
+  "objetivo": "is_canceled: cancelación o no presentación",
+  "sha256_raw": "7c2ae42a7353905ea136e5c2287f17c92c5435826598bfbb8491c6f0c7b1fc06",
+  "sha256_gold": "2718ad6c88b52da2914b54e5f6eccb51815a2ff3c59100793c093292f900c60c",
+  "semilla": 42,
+  "cupo_porcentaje": 20,
+  "bloques": {
+    "entrenamiento": {
+      "filas": 48428,
+      "positivos": 17340,
+      "prevalencia": 0.3580573222102916,
+      "llegada_min": "2015-07-01",
+      "llegada_max": "2016-06-29"
+    },
+    "validacion": {
+      "filas": 28754,
+      "positivos": 10553,
+      "prevalencia": 0.3670098073311539,
+      "llegada_min": "2016-07-01",
+      "llegada_max": "2016-12-30"
+    },
+    "prueba": {
+      "filas": 40687,
+      "positivos": 15745,
+      "prevalencia": 0.38697864182662767,
+      "llegada_min": "2017-01-01",
+      "llegada_max": "2017-08-31"
+    }
+  },
+  "apartadas_grupo": 0,
+  "apartadas_cierre": 1521,
+  "ganador": "bosque",
+  "validacion": {
+    "logistica": {
+      "roc_auc": 0.7711849304110667,
+      "average_precision": 0.7249122802232693,
+      "cupo": 5746,
+      "positivos_detectados": 4330,
+      "precision_cupo": 0.7535676992690568,
+      "recall_cupo": 0.410309864493509,
+      "umbral_05": {
+        "precision": 0.724113475177305,
+        "recall": 0.48374869705297074,
+        "f1": 0.5800147702096233,
+        "matriz_tn_fp_fn_tp": [
+          16256,
+          1945,
+          5448,
+          5105
+        ]
+      }
+    },
+    "bosque": {
+      "roc_auc": 0.7879384586511302,
+      "average_precision": 0.7443837851597884,
+      "cupo": 5746,
+      "positivos_detectados": 4432,
+      "precision_cupo": 0.7713191785589976,
+      "recall_cupo": 0.4199753624561736,
+      "umbral_05": {
+        "precision": 0.8562912497338727,
+        "recall": 0.38112385103761964,
+        "f1": 0.5274754098360656,
+        "matriz_tn_fp_fn_tp": [
+          17526,
+          675,
+          6531,
+          4022
+        ]
+      }
+    },
+    "regla_antelacion": {
+      "roc_auc": 0.6764151347571751,
+      "average_precision": 0.5473296022992014,
+      "cupo": 5746,
+      "positivos_detectados": 3217,
+      "precision_cupo": 0.5598677340758789,
+      "recall_cupo": 0.30484222495972707
+    }
+  },
+  "prueba": {
+    "bosque": {
+      "roc_auc": 0.7855306559550963,
+      "average_precision": 0.7497342196242515,
+      "cupo": 8130,
+      "positivos_detectados": 6249,
+      "precision_cupo": 0.7686346863468635,
+      "recall_cupo": 0.3968879009209273,
+      "umbral_05": {
+        "precision": 0.872803482186039,
+        "recall": 0.34385519212448395,
+        "f1": 0.49334791324949884,
+        "matriz_tn_fp_fn_tp": [
+          24153,
+          789,
+          10331,
+          5414
+        ]
+      }
+    },
+    "regla_antelacion": {
+      "roc_auc": 0.6551382567353019,
+      "average_precision": 0.5093465633839029,
+      "cupo": 8130,
+      "positivos_detectados": 4177,
+      "precision_cupo": 0.5137761377613776,
+      "recall_cupo": 0.2652905684344236
+    }
+  },
+  "versiones": {
+    "python": "3.14.5",
+    "sklearn": "1.9.0",
+    "pandas": "3.0.3",
+    "numpy": "2.4.6"
+  }
+}
